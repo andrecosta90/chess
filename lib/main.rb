@@ -2,6 +2,7 @@
 
 require_relative 'color'
 require_relative 'board'
+require_relative 'pieces/pawn'
 
 # N = 8
 
@@ -20,9 +21,15 @@ require_relative 'board'
 # puts "   #{(' A  '..' H  ').to_a.map(&:green).join('')}"
 # puts
 
-
+# pawn = Pawn.new(true)
+# p pawn
 board = Board.new
-board.show
 
-board.move([6, 4], [4, 4])
-board.show
+loop do
+  board.show
+  input = gets.strip
+  board.move(input[...2], input[2..])
+end
+
+# board.move([6, 4], [4, 4])
+# board.show
