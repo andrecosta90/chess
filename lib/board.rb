@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'pieces/pawn'
+require './lib/color'
+require './lib/pieces/pawn'
 
 class Board
   attr_reader :grid, :size
@@ -15,15 +16,13 @@ class Board
 
     # black pawn
     @size.times { |col| @grid[1][col] = Pawn.new(false) }
-
-    @messages = ['']
   end
 
   def empty?(position)
     @grid[position[0]][position[1]] == '    '
   end
 
-  def get_piece(position)
+  def select_piece_from(position)
     @grid[position[0]][position[1]]
   end
 
@@ -33,22 +32,33 @@ class Board
     src = get_coordinates(source)
     tge = get_coordinates(target)
 
-    piece = get_piece(src)
+    piece = select_piece_from(src)
 
+    # raise if king is in danger !!!
     raise StandardError, 'Invalid move -- There is no piece in this position!' if empty?(src)
-    raise StandardError, 'Invalid movement' unless piece.valid_movement?(src, tge, self)
+
+    unless piece.valid_movement?(
+      src, tge, self
+    )
+      raise StandardError,
+            "Invalid movement -- You can't move from #{source.yellow} → #{target.yellow}"
+    end
 
     piece.move
     p piece
 
     @grid[src[0]][src[1]] = '    ' # FIX ? empty square ?
+
+    # captured_piece = @grid[tge[0]][tge[1]] unless empty?(tge)
     @grid[tge[0]][tge[1]] = piece
 
-    @messages.push("#{piece.to_s.bg_green} : #{source.green} → #{target.green} :: #{src} → #{tge}")
+    # TODO: sort capture !!!
+    # @messages.push("#{piece.to_s.bg_green} : #{source.green} → #{target.green} :: #{src} → #{tge}")
+    true
   end
 
   def show
-    # system 'clear'
+    system 'clear'
     n = size
     puts
     puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"

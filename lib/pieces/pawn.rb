@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'piece'
+require './lib/pieces/piece'
 
 class Pawn < Piece
   def initialize(white)
@@ -15,7 +15,7 @@ class Pawn < Piece
   def valid_movement?(source, target, board)
     candidates = get_candidates(source).select { |pos| board.empty?(pos) }
     capt_candidates = get_capture_candidates(source).reject do |pos|
-      board.empty?(pos) || board.get_piece(pos).white == white
+      board.empty?(pos) || board.select_piece_from(pos).white == white
     end
 
     # need to track captures
