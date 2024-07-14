@@ -3,12 +3,14 @@
 require './lib/board'
 
 class Game
-  attr_reader :board
+  # attr_reader :board
 
-  INPUT_PATTERN = Regexp.new(/^(?:[a-h][1-8]){2}$/)
-
-  def initialize
+  def initialize(white_player, black_player)
     @board = Board.new
+    @players = [white_player, black_player]
+
+    @index = 0
+    @current_player = @players[@index]
 
     @messages = []
     @round_message = ''
@@ -24,34 +26,25 @@ class Game
       # 3. if true => make move
       # 4. any capture ? promotion ?
       begin
-        value = input
-        board.move(value[...2], value[2..])
+        @current_player.make_move(@board)
         @round_message = 'Success!'.green.bold
+        switch_players!
       rescue StandardError => e
         @round_message = e.to_s.red
       end
     end
   end
 
-  private
-
-  def input
-    value = gets.strip
-    raise StandardError, "Invalid input from user :: value='#{value}'" if INPUT_PATTERN.match(value).nil?
-
-    value
-  end
-
   def show
-    system 'clear'
+    # system 'clear'
     puts "\n*** MY CHESS GAME***\n".green.bold
-    n = board.size
+    n = @board.size
     puts
     puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"
     n.times do |i|
       print "#{n - i}  ".green
       n.times do |j|
-        piece = board.select_piece_from([i, j])
+        piece = @board.select_piece_from([i, j])
         square = (i + j).even? ? piece.to_s.bg_yellow : piece.to_s.bg_red
         print square
       end
@@ -66,9 +59,10 @@ class Game
   end
   # rubocop:enable Metrics
 
-  def move(number)
-    return false if number.even?
+  private
 
-    true
+  def switch_players!
+    @index = 1 - @index
+    @current_player = @players[@index]
   end
 end

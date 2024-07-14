@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Piece
-  attr_reader :white
-
   def initialize(white)
     @white = white
     @symbol = @white ? " \u2659  ".gray : " \u2659  ".black
@@ -16,6 +14,10 @@ class Piece
   end
 
   def candidates; end
+
+  def white?
+    @white
+  end
 
   def to_s
     @symbol
