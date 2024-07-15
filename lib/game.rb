@@ -27,16 +27,16 @@ class Game
       # 4. any capture ? promotion ?
       begin
         @current_player.make_move(@board)
-        @round_message = 'Success!'.green.bold
+        @round_message = "Success!\n".green.bold
         switch_players!
       rescue StandardError => e
-        @round_message = e.to_s.red
+        @round_message = "#{e}\n".red
       end
     end
   end
 
   def show
-    # system 'clear'
+    system 'clear'
     puts "\n*** MY CHESS GAME***\n".green.bold
     n = @board.size
     puts
@@ -55,11 +55,16 @@ class Game
     puts
     # puts @messages.last(3).join("\n")
     puts @round_message
+    puts captured_display
     puts
   end
   # rubocop:enable Metrics
 
   private
+
+  def captured_display
+    "#{@players[0].captured_pieces}\n#{@players[1].captured_pieces}"
+  end
 
   def switch_players!
     @index = 1 - @index

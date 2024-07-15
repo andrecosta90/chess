@@ -1,19 +1,17 @@
 # frozen_string_literal: true
 
 class Piece
-  def initialize(white)
+  def initialize(white, symbol)
     @white = white
-    @symbol = @white ? " \u2659  ".gray : " \u2659  ".black
+    @symbol = symbol
     @n_movements = 0
   end
 
-  def move; end
+  def update; end
 
   def valid_movement?(_src, _tge, _board)
     true
   end
-
-  def candidates; end
 
   def white?
     @white
@@ -22,4 +20,9 @@ class Piece
   def to_s
     @symbol
   end
+
+  private
+
+  def movable_items; end
+  def capturable_items; end
 end

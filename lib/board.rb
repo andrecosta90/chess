@@ -27,29 +27,8 @@ class Board
   end
 
   def update(row, col, value)
+    previous_value = @grid[row][col]
     @grid[row][col] = value
-  end
-
-  # mock => need to translate from chess notation to matrix notation
-  # rubocop:disable Metrics
-  def show
-    system 'clear'
-    n = size
-    puts
-    puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"
-    n.times do |i|
-      print "#{n - i}  ".green
-      n.times do |j|
-        piece = @grid[i][j]
-        square = (i + j).even? ? piece.to_s.bg_yellow : piece.to_s.bg_red
-        print square
-      end
-      print "  #{n - i}".green
-      puts
-    end
-    puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"
-    puts
-    puts @messages.last(3).join("\n")
-    puts
+    previous_value
   end
 end
