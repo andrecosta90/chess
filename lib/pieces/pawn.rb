@@ -3,22 +3,11 @@
 require './lib/pieces/piece'
 
 class Pawn < Piece
+  CODE_POINT = " \u2659  "
+
   def initialize(white)
-    super(white, white ? " \u2659  ".gray : " \u2659  ".black)
+    super(white, white ? CODE_POINT.gray : CODE_POINT.black)
     @additive_factor = white ? -1 : 1
-  end
-
-  def update
-    @n_movements += 1
-  end
-
-  def valid_movement?(source, target, board)
-    candidates = movable_items(source).select { |pos| board.empty?(pos) }
-    captured_candidates = capturable_items(source).reject do |pos|
-      board.empty?(pos) || board.select_piece_from(pos).white? == white?
-    end
-
-    candidates.include?(target) || captured_candidates.include?(target)
   end
 
   private
