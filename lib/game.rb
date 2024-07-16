@@ -36,7 +36,7 @@ class Game
   end
 
   def show
-    # system 'clear'
+    system 'clear'
     puts "\n*** MY CHESS GAME***\n".green.bold
     n = @board.size
     puts

@@ -31,7 +31,7 @@ class Piece
   private
 
   def out_of_range?(value)
-    value.negative? || value > 7
+    (value[0].negative? || value[0] > 7) || (value[1].negative? || value[1] > 7)
   end
 
   def movable_items; end

@@ -10,6 +10,11 @@ class Pawn < Piece
     @additive_factor = white ? -1 : 1
   end
 
+  # TODO
+  def en_passant; end
+  # TODO
+  def promotion; end
+
   private
 
   def movable_items(source)

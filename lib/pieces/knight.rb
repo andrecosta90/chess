@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
+require './lib/pieces/piece'
+
 class Knight < Piece
   CODE_POINT = " \u2658  "
   def initialize(white)
     super(white, white ? CODE_POINT.gray : CODE_POINT.black)
   end
 
-  # rubocop:disable Metrics
-  # TODO: Refactor me
   def movable_items(source)
-    items = [
-      [source[0] + 1, source[1] + 2],
-      [source[0] + 2, source[1] + 1],
-      [source[0] + 2, source[1] - 1],
-      [source[0] + 1, source[1] - 2],
-      [source[0] - 1, source[1] - 2],
-      [source[0] - 2, source[1] - 1],
-      [source[0] - 1, source[1] + 2],
-      [source[0] - 2, source[1] + 1]
-    ]
-
-    items.reject { |value| out_of_range?(value[0]) || out_of_range?(value[1]) }
+    arr = permutations
+    items = arr.map { |param| move_item(source, param) }
+    items.reject { |value| out_of_range?(value) }
   end
-  # rubocop:enable Metrics
 
   def capturable_items(source)
     movable_items(source)
+  end
+
+  private
+
+  def move_item(source, param)
+    [source[0] + param[0], source[1] + param[1]]
+  end
+
+  def permutations
+    [-2, -1, 1, 2].permutation(2).reject { |value| value[0].abs == value[1].abs }
   end
 end
