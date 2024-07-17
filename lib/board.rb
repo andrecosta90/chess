@@ -17,8 +17,8 @@ class Board
     #
     # white pieces
     @size.times { |col| @grid[6][col] = Pawn.new(true) }
-    @grid[7][1] = Knight.new(true)
-    @grid[7][6] = Knight.new(true)
+    # @grid[7][1] = Knight.new(true)
+    # @grid[7][6] = Knight.new(true)
     @grid[7][0] = Rook.new(true)
     @grid[7][7] = Rook.new(true)
 
@@ -43,5 +43,39 @@ class Board
     previous_value = @grid[row][col]
     @grid[row][col] = value
     previous_value
+  end
+
+  def validate_move(object, piece, player)
+    raise StandardError, 'Invalid move -- There is no piece in this position!' if empty?(object[:source])
+    raise StandardError, "Invalid move -- #{player} can't move this piece!" if piece.white? != player.white?
+
+    # TODO: raise when piece try to leap - knight is an exception!
+    return if piece.valid_movement?(object[:source], object[:target], self)
+
+    raise StandardError, "Invalid movement -- You can't move to this position!"
+  end
+
+  def execute_move(object, piece, player)
+    piece.update
+    clear_source_square(object[:source])
+    captured_piece = move_piece_to_target(piece, object[:target])
+
+    handle_capture(captured_piece, player)
+  end
+
+  private
+
+  def clear_source_square(source)
+    update(source[0], source[1], '    ') # empty square
+  end
+
+  def move_piece_to_target(piece, target)
+    update(target[0], target[1], piece)
+  end
+
+  def handle_capture(captured_piece, player)
+    return if captured_piece == '    '
+
+    player.capture(player.white? ? captured_piece.to_s.bg_gray.black : captured_piece.to_s.gray)
   end
 end

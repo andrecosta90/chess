@@ -30,7 +30,7 @@ class Game
         @round_message = "Success!\n".green.bold
         switch_players!
       rescue StandardError => e
-        @round_message = "#{e}\n".red
+        @round_message = "#{e}\n#{e.backtrace.join("\n")}\n".red
       end
     end
   end

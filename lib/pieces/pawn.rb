@@ -24,13 +24,13 @@ class Pawn < Piece
 
     array.push([source[0] + (@additive_factor * 2), source[1]]) if @n_movements.zero?
 
-    array
+    array.reject { |value| out_of_range?(value) }
   end
 
   def capturable_items(source)
     [
       [source[0] + @additive_factor, source[1] + 1],
       [source[0] + @additive_factor, source[1] - 1]
-    ]
+    ].reject { |value| out_of_range?(value) }
   end
 end
