@@ -17,8 +17,8 @@ class Board
     #
     # white pieces
     @size.times { |col| @grid[6][col] = Pawn.new(true) }
-    # @grid[7][1] = Knight.new(true)
-    # @grid[7][6] = Knight.new(true)
+    @grid[7][1] = Knight.new(true)
+    @grid[7][6] = Knight.new(true)
     @grid[7][0] = Rook.new(true)
     @grid[7][7] = Rook.new(true)
 
@@ -61,6 +61,10 @@ class Board
     captured_piece = move_piece_to_target(piece, object[:target])
 
     handle_capture(captured_piece, player)
+  end
+
+  def path_free?(array)
+    array.all? { |value| empty?(value) }
   end
 
   private
