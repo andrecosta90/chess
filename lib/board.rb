@@ -4,6 +4,7 @@ require './lib/color'
 require './lib/pieces/knight'
 require './lib/pieces/pawn'
 require './lib/pieces/rook'
+require './lib/pieces/bishop'
 
 class Board
   attr_reader :size
@@ -16,11 +17,13 @@ class Board
     # initial state
     #
     # white pieces
-    @size.times { |col| @grid[6][col] = Pawn.new(true) }
-    @grid[7][1] = Knight.new(true)
-    @grid[7][6] = Knight.new(true)
+    # @size.times { |col| @grid[6][col] = Pawn.new(true) }
+    # @grid[7][1] = Knight.new(true)
+    # @grid[7][6] = Knight.new(true)
     @grid[7][0] = Rook.new(true)
     @grid[7][7] = Rook.new(true)
+    @grid[7][2] = Bishop.new(true)
+    @grid[7][5] = Bishop.new(true)
 
     # black pawn
     @size.times { |col| @grid[1][col] = Pawn.new(false) }

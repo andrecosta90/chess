@@ -9,12 +9,17 @@ class Rook < Piece
   end
 
   def valid_movement?(source, target, board)
+    return false if source == target # TODO: Refactor me please!!!
     return false unless valid_path?(source, target, board)
 
-    super(source, target, board)
+    same_row_or_column?(target, source)
   end
 
   private
+
+  def same_row_or_column?(target, source)
+    source[0] == target[0] || source[1] == target[1]
+  end
 
   def valid_path?(source, target, board)
     index = movement_axis(source, target)
@@ -36,9 +41,5 @@ class Rook < Piece
     range = (signal * source[1 - index]..signal * target[1 - index])
     range = signal.positive? ? range.reject(&:negative?) : range
     range.to_a[1...-1].map { |value| index == 1 ? [value.abs, source[index]] : [source[index], value.abs] }
-  end
-
-  def permutations
-    (-7..7).reject(&:zero?).flat_map { |idx| [[0, idx], [idx, 0]] }
   end
 end

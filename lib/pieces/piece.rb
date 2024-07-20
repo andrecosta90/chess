@@ -12,6 +12,9 @@ class Piece
   end
 
   def valid_movement?(source, target, board)
+    # TODO: Refactor me please!!
+    # maybe this function is usefull only for pawn
+    #
     p source
     p target
     candidates = movable_items(source).select { |pos| board.empty?(pos) }
