@@ -9,10 +9,10 @@ class Rook < Piece
   end
 
   def valid_movement?(source, target, board)
-    return false if source == target # TODO: Refactor me please!!!
-    return false unless valid_path?(source, target, board)
+    return false unless super(source, target, board)
+    return false unless same_row_or_column?(target, source)
 
-    same_row_or_column?(target, source)
+    valid_path?(source, target, board)
   end
 
   private
@@ -39,7 +39,7 @@ class Rook < Piece
 
   def movement_range(source, target, index, signal)
     range = (signal * source[1 - index]..signal * target[1 - index])
-    range = signal.positive? ? range.reject(&:negative?) : range
+    range = signal.positive? ? range.reject(&:negative?) : range # TODO: DRY !!
     range.to_a[1...-1].map { |value| index == 1 ? [value.abs, source[index]] : [source[index], value.abs] }
   end
 end
