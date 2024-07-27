@@ -47,7 +47,7 @@ class Bishop < Piece
   def get_range(src, tgt)
     signal = src > tgt ? -1 : 1
     range = (signal * src..signal * tgt)
-    signal.positive? ? range.reject(&:negative?) : range # TODO: DRY !!
-    range.to_a[1...-1].map(&:abs)
+    signal.positive? ? range.reject(&:negative?) : range
+    trim_path(range, signal).map(&:abs)
   end
 end

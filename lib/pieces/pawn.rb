@@ -10,12 +10,31 @@ class Pawn < Piece
     @additive_factor = white ? -1 : 1
   end
 
+  def valid_movement?(source, target, board)
+    return false unless super(source, target, board)
+
+    valid_path?(source, target, board)
+  end
+
   # TODO
   def en_passant; end
   # TODO
   def promotion; end
 
   private
+
+  def valid_path?(source, target, board)
+    candidates = movable_items(source).select { |pos| board.empty?(pos) }
+    captured_candidates = capturable_items(source).reject do |pos|
+      board.empty?(pos) || board.select_piece_from(pos).white? == white?
+    end
+
+    candidates.include?(target) || captured_candidates.include?(target)
+  end
+
+  def move_item(source, param)
+    [source[0] + param[0], source[1] + param[1]]
+  end
 
   def movable_items(source)
     array = [

@@ -15,6 +15,9 @@ class Rook < Piece
     valid_path?(source, target, board)
   end
 
+  # TODO
+  def castling; end
+
   private
 
   def same_row_or_column?(target, source)
@@ -39,7 +42,6 @@ class Rook < Piece
 
   def movement_range(source, target, index, signal)
     range = (signal * source[1 - index]..signal * target[1 - index])
-    range = signal.positive? ? range.reject(&:negative?) : range # TODO: DRY !!
-    range.to_a[1...-1].map { |value| index == 1 ? [value.abs, source[index]] : [source[index], value.abs] }
+    trim_path(range, signal).map { |value| index == 1 ? [value.abs, source[index]] : [source[index], value.abs] }
   end
 end

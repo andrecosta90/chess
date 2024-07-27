@@ -17,7 +17,7 @@ class Board
     # initial state
     #
     # white pieces
-    # @size.times { |col| @grid[6][col] = Pawn.new(true) }
+    @size.times { |col| @grid[6][col] = Pawn.new(true) }
     # @grid[7][1] = Knight.new(true)
     # @grid[7][6] = Knight.new(true)
     @grid[7][0] = Rook.new(true)
