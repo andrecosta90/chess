@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require './lib/pieces/piece'
 require './lib/pieces/movements/diagonal'
 
 class Bishop < Piece
