@@ -18,10 +18,8 @@ class Player
     object = translate_input(input)
     piece = board.select_piece_from(object[:source])
 
-    board.validate_move(object, piece, self) # TODO: move these methods to Board Class!
+    board.validate_move(object, piece, self)
     board.execute_move(object, piece, self)
-    # validate_move(board, object, piece)
-    # execute_move(board, object, piece)
   end
 
   def captured_pieces
