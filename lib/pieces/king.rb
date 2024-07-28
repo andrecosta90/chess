@@ -2,14 +2,14 @@
 
 require './lib/pieces/piece'
 
-class Knight < Piece
-  CODE_POINT = " \u2658  "
+class King < Piece
+  CODE_POINT = " \u2654  "
   def initialize(white)
     super(white, white ? CODE_POINT.gray : CODE_POINT.black)
   end
 
   def valid_movement?(source, target, board)
-    return false unless super(source, target, board)
+    false unless super(source, target, board)
 
     can_reach_target?(source, target, board)
   end
@@ -17,6 +17,7 @@ class Knight < Piece
   private
 
   def candidates
-    [-2, -1, 1, 2].permutation(2).reject { |value| value[0].abs == value[1].abs }
+    array = [-1, 0, 1]
+    array.product(array).reject { |value| value[0].zero? & value[1].zero? }
   end
 end

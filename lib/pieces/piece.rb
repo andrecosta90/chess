@@ -25,12 +25,12 @@ class Piece
   end
 
   def can_reach_target?(source, target, board)
-    candidates = movable_items(source).select { |pos| board.empty?(pos) }
-    captured_candidates = capturable_items(source).reject do |pos|
+    movable_candidates = movable_items(source).select { |pos| board.empty?(pos) }
+    capturable_candidates = capturable_items(source).reject do |pos|
       board.empty?(pos) || board.select_piece_from(pos).white? == white?
     end
 
-    candidates.include?(target) || captured_candidates.include?(target)
+    movable_candidates.include?(target) || capturable_candidates.include?(target)
   end
 
   def white?
@@ -44,7 +44,7 @@ class Piece
   private
 
   def movable_items(source)
-    arr = permutations
+    arr = candidates
     items = arr.map { |param| move_item(source, param) }
     items.reject { |value| out_of_range?(value) }
   end
@@ -66,5 +66,5 @@ class Piece
     range.to_a[1...-1]
   end
 
-  def permutations; end
+  def candidates; end
 end
