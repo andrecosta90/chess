@@ -8,6 +8,12 @@ class Knight < Piece
     super(white, white ? CODE_POINT.gray : CODE_POINT.black)
   end
 
+  def valid_movement?(source, target, board)
+    return false unless super(source, target, board)
+
+    can_reach_target?(source, target, board)
+  end
+
   private
 
   def permutations
