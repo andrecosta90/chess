@@ -22,8 +22,8 @@ class Board
     @size.times { |col| @grid[6][col] = Pawn.new(true) }
     # @grid[7][1] = Knight.new(true)
     # @grid[7][6] = Knight.new(true)
-    @grid[6][5] = Queen.new(true)
-    @grid[6][6] = King.new(true)
+    @grid[7][3] = Queen.new(true)
+    @grid[7][4] = King.new(true)
 
     @grid[7][0] = Rook.new(true)
     @grid[7][7] = Rook.new(true)
