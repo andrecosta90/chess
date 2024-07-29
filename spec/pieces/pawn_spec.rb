@@ -108,5 +108,34 @@ describe Pawn do
       end
     end
   end
+
+  describe '#valid_movement?' do
+    let(:board) { Board.new }
+    let(:source) { [6, 3] }
+    let(:invalid_target) { [3, 3] }
+    let(:valid_target) { [4, 3] }
+
+    context 'when pawn tries an invalid move' do
+      it 'returns false' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, invalid_target, board)).to be false
+      end
+    end
+
+    context 'when the pawn tries to move two squares again' do
+      it 'returns false' do
+        piece = board.select_piece_from(source)
+        piece.update
+        expect(piece.valid_movement?(source, valid_target, board)).to be false
+      end
+    end
+
+    context 'when pawn tries an valid move' do
+      it 'returns true' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, valid_target, board)).to be true
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

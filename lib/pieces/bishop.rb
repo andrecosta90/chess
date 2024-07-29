@@ -15,10 +15,6 @@ class Bishop < Piece
     return false unless super(source, target, board)
     return false unless same_diagonal?(target, source)
 
-    p "source= #{source}"
-    p "target= #{target}"
-    p "movement_direction= #{movement_direction(target, source)}"
-
     diagonal_path_valid?(source, target, board)
   end
 end

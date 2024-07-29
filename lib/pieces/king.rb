@@ -9,7 +9,7 @@ class King < Piece
   end
 
   def valid_movement?(source, target, board)
-    false unless super(source, target, board)
+    return false unless super(source, target, board)
 
     can_reach_target?(source, target, board)
   end

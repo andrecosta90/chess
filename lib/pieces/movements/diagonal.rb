@@ -3,8 +3,6 @@
 module DiagonalMoveable
   def diagonal_path_valid?(source, target, board)
     array = diagonal_movement_range(source, target)
-    p "path= #{array.to_a}"
-
     board.path_free?(array)
   end
 

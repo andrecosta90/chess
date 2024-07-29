@@ -8,7 +8,6 @@ describe Knight do
   subject(:piece) { described_class.new(true) }
   describe '#movable_items' do
     context 'when the knight is in the center' do
-
       let(:x) { 3 }
       let(:y) { 3 }
 
@@ -31,7 +30,6 @@ describe Knight do
     end
 
     context 'when the knight is in botton left corner' do
-
       let(:x) { 7 }
       let(:y) { 0 }
 
@@ -43,5 +41,25 @@ describe Knight do
     end
   end
 
+  describe '#valid_movement?' do
+    let(:board) { Board.new }
+    let(:source) { [0, 1] }
+    let(:invalid_target) { [3, 2] }
+    let(:valid_target) { [2, 2] }
+
+    context 'when knight tries an invalid move' do
+      it 'returns false' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, invalid_target, board)).to be false
+      end
+    end
+
+    context 'when knight tries an valid move' do
+      it 'returns true' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, valid_target, board)).to be true
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
