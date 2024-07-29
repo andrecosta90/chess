@@ -47,6 +47,10 @@ class Board
     @grid[position[0]][position[1]]
   end
 
+  def this_piece_white?(position)
+    select_piece_from(position).white?
+  end
+
   def update(row, col, value)
     previous_value = @grid[row][col]
     @grid[row][col] = value
