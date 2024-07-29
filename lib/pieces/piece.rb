@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Piece
+  attr_reader :n_movements
+
   def initialize(white, symbol)
     @white = white
     @symbol = symbol
@@ -14,7 +16,7 @@ class Piece
   def same_player?(target, board)
     return false if board.empty?(target)
 
-    board.select_piece_from(target).white? == white?
+    board.this_piece_white?(target) == white?
   end
 
   def valid_movement?(source, target, board)
@@ -27,7 +29,7 @@ class Piece
   def can_reach_target?(source, target, board)
     movable_candidates = movable_items(source).select { |pos| board.empty?(pos) }
     capturable_candidates = capturable_items(source).reject do |pos|
-      board.empty?(pos) || board.select_piece_from(pos).white? == white?
+      board.empty?(pos) || board.this_piece_white?(pos) == white?
     end
 
     movable_candidates.include?(target) || capturable_candidates.include?(target)
