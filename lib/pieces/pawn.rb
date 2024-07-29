@@ -3,6 +3,8 @@
 require './lib/pieces/piece'
 
 class Pawn < Piece
+  attr_reader :additive_factor
+
   CODE_POINT = " \u2659  "
 
   def initialize(white)
@@ -20,8 +22,6 @@ class Pawn < Piece
   def en_passant; end
   # TODO
   def promotion; end
-
-  private
 
   def movable_items(source)
     array = [

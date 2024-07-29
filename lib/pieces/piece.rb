@@ -43,17 +43,17 @@ class Piece
     @symbol
   end
 
-  private
-
   def movable_items(source)
     arr = candidates
-    items = arr.map { |param| move_item(source, param) }
+    items = arr.map { |param| move_item(source, param) }.sort
     items.reject { |value| out_of_range?(value) }
   end
 
   def capturable_items(source)
     movable_items(source)
   end
+
+  private
 
   def move_item(source, param)
     [source[0] + param[0], source[1] + param[1]]

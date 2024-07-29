@@ -78,5 +78,56 @@ describe Piece do
       end
     end
   end
+
+  describe '#can_reach_target?' do
+    context 'when the pawn can reach the target by moving' do
+      before do
+        allow(piece).to receive(:movable_items).and_return(
+          [[0, 1], [1, 2]]
+        )
+        allow(piece).to receive(:capturable_items).and_return(
+          []
+        )
+        allow(board).to receive(:empty?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(piece.can_reach_target?([0, 0], [1, 2], board)).to be true
+      end
+    end
+
+    context 'when the pawn can reach the target by capturing' do
+      before do
+        allow(piece).to receive(:movable_items).and_return(
+          []
+        )
+        allow(piece).to receive(:capturable_items).and_return(
+          [[0, 1], [1, 2]]
+        )
+        allow(board).to receive(:empty?).and_return(false)
+        allow(board).to receive(:this_piece_white?).and_return(false)
+      end
+
+      it 'returns true' do
+        expect(piece.can_reach_target?([0, 0], [1, 2], board)).to be true
+      end
+    end
+
+    context 'when the pawn is not able to reach the target' do
+      before do
+        allow(piece).to receive(:movable_items).and_return(
+          [[0, 1], [3, 4]]
+        )
+        allow(piece).to receive(:capturable_items).and_return(
+          [[0, 1], [5, 2]]
+        )
+        allow(board).to receive(:empty?).and_return(true)
+      end
+
+      it 'returns false' do
+        expect(piece.can_reach_target?([0, 0], [1, 2], board)).to be false
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
