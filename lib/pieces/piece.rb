@@ -62,7 +62,7 @@ class Piece
   end
 
   def trim_path(range, signal)
-    range = signal.positive? ? range.reject(&:negative?) : range # TODO: DRY !!
+    range = signal.positive? ? range.reject(&:negative?) : range
     range.to_a[1...-1]
   end
 

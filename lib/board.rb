@@ -5,9 +5,11 @@ require './lib/pieces/knight'
 require './lib/pieces/pawn'
 require './lib/pieces/rook'
 require './lib/pieces/bishop'
+require './lib/pieces/queen'
+require './lib/pieces/king'
 
 class Board
-  attr_reader :size
+  attr_reader :size, :grid
 
   # rubocop:disable Metrics
   def initialize
@@ -20,6 +22,9 @@ class Board
     @size.times { |col| @grid[6][col] = Pawn.new(true) }
     # @grid[7][1] = Knight.new(true)
     # @grid[7][6] = Knight.new(true)
+    @grid[6][5] = Queen.new(true)
+    @grid[6][6] = King.new(true)
+
     @grid[7][0] = Rook.new(true)
     @grid[7][7] = Rook.new(true)
     @grid[7][2] = Bishop.new(true)
@@ -52,16 +57,15 @@ class Board
     raise StandardError, 'Invalid move -- There is no piece in this position!' if empty?(object[:source])
     raise StandardError, "Invalid move -- #{player} can't move this piece!" if piece.white? != player.white?
 
-    # TODO: raise when piece try to leap - knight is an exception!
-    return if piece.valid_movement?(object[:source], object[:target], self)
+    return true if piece.valid_movement?(object[:source], object[:target], self)
 
     raise StandardError, "Invalid movement -- You can't move to this position!"
   end
 
   def execute_move(object, piece, player)
     piece.update
-    clear_source_square(object[:source])
-    captured_piece = move_piece_to_target(piece, object[:target])
+    update(object[:source][0], object[:source][1], '    ')
+    captured_piece = update(object[:target][0], object[:target][1], piece)
 
     handle_capture(captured_piece, player)
   end
@@ -72,17 +76,10 @@ class Board
 
   private
 
-  def clear_source_square(source)
-    update(source[0], source[1], '    ') # empty square
-  end
-
-  def move_piece_to_target(piece, target)
-    update(target[0], target[1], piece)
-  end
-
   def handle_capture(captured_piece, player)
-    return if captured_piece == '    '
+    return false if captured_piece == '    '
 
     player.capture(player.white? ? captured_piece.to_s.bg_gray.black : captured_piece.to_s.gray)
+    true
   end
 end

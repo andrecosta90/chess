@@ -8,6 +8,6 @@ def parse_file(char)
   char.downcase.ord - 97
 end
 
-def parse_rank(char, size)
+def parse_rank(char, size = 8)
   size - char.to_i
 end
