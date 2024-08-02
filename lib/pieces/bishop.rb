@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 require './lib/pieces/piece'
-require './lib/pieces/movements/diagonal'
 
 class Bishop < Piece
-  include DiagonalMoveable
-
   CODE_POINT = " \u2657  "
   def initialize(white)
     super(white, white ? CODE_POINT.gray : CODE_POINT.black, 'bishop')

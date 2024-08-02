@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+require './lib/pieces/movements/diagonal'
+require './lib/pieces/movements/straight'
+
 class Piece
+  include DiagonalMoveable
+  include StraightMoveable
+
   attr_reader :n_movements, :name
 
   def initialize(white, symbol, name = 'default_piece')
@@ -12,6 +18,20 @@ class Piece
 
   def update
     @n_movements += 1
+  end
+
+  def path_valid?(source, target, board)
+    straight = same_row_or_column?(target, source)
+    diagonal = same_diagonal?(target, source)
+    return false unless straight || diagonal
+
+    if straight
+      return straight_path_valid?(source, target, board)
+    elsif diagonal
+      return diagonal_path_valid?(source, target, board)
+    end
+
+    false
   end
 
   def same_player?(target, board)

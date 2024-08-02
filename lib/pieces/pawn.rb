@@ -14,8 +14,9 @@ class Pawn < Piece
 
   def valid_movement?(source, target, board)
     return false unless super(source, target, board)
+    return false unless can_reach_target?(source, target, board)
 
-    can_reach_target?(source, target, board)
+    path_valid?(source, target, board)
   end
 
   # TODO
