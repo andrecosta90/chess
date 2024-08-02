@@ -2,10 +2,10 @@
 
 ## TODO
 
-- [ ] Tests
-- [ ] Promotion
+- [x] Tests
 - [ ] Check
 - [ ] Checkmate
+- [ ] Capture tests
 - [ ] Serialization
 - [ ] En passant
 - [ ] Castling

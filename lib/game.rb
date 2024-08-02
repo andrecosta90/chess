@@ -7,6 +7,7 @@ class Game
 
   def initialize(white_player, black_player)
     @board = Board.new
+    @board.default_state
     @players = [white_player, black_player]
 
     @index = 0

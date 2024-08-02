@@ -15,29 +15,13 @@ class Board
   def initialize
     @size = 8
     @grid = Array.new(size) { Array.new(size, '    ') }
-
-    # initial state
-    #
-    # white pieces
-    @size.times { |col| @grid[6][col] = Pawn.new(true) }
-    # @grid[7][1] = Knight.new(true)
-    # @grid[7][6] = Knight.new(true)
-    @grid[7][3] = Queen.new(true)
-    @grid[7][4] = King.new(true)
-
-    @grid[7][0] = Rook.new(true)
-    @grid[7][7] = Rook.new(true)
-    @grid[7][2] = Bishop.new(true)
-    @grid[7][5] = Bishop.new(true)
-
-    # black pawn
-    @size.times { |col| @grid[1][col] = Pawn.new(false) }
-    @grid[0][1] = Knight.new(false)
-    @grid[0][6] = Knight.new(false)
-    @grid[0][0] = Rook.new(false)
-    @grid[0][7] = Rook.new(false)
   end
-  # rubocop:enable Metrics
+
+  def default_state
+    create_objects(true)
+    create_objects(false)
+
+  end
 
   def empty?(position)
     @grid[position[0]][position[1]] == '    '
@@ -67,6 +51,7 @@ class Board
   end
 
   def execute_move(object, piece, player)
+    # validate_move(object, piece, player)
     piece.update
     update(object[:source][0], object[:source][1], '    ')
     captured_piece = update(object[:target][0], object[:target][1], piece)
@@ -79,6 +64,19 @@ class Board
   end
 
   private
+
+  def create_objects(white)
+    indexes = white ? [7, 6] : [0, 1]
+    @size.times { |col| @grid[indexes[1]][col] = Pawn.new(white) }
+    @grid[indexes[0]][0] = Rook.new(white)
+    @grid[indexes[0]][1] = Knight.new(white)
+    @grid[indexes[0]][2] = Bishop.new(white)
+    @grid[indexes[0]][3] = Queen.new(white)
+    @grid[indexes[0]][4] = King.new(white)
+    @grid[indexes[0]][5] = Bishop.new(white)
+    @grid[indexes[0]][6] = Knight.new(white)
+    @grid[indexes[0]][7] = Rook.new(white)
+  end
 
   def handle_capture(captured_piece, player)
     return false if captured_piece == '    '
