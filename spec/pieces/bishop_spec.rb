@@ -37,6 +37,10 @@ describe Bishop do
     let(:invalid_target_one) { [5, 1] }
     let(:invalid_target_two) { [7, 0] }
     let(:valid_target) { [5, 4] }
+
+    before do
+      board.default_state
+    end
     context 'when bishop tries an invalid move' do
       it 'returns false' do
         piece = board.select_piece_from(source)

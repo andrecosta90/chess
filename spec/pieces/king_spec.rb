@@ -48,6 +48,10 @@ describe King do
     let(:invalid_target_two) { [5, 2] }
     let(:valid_target) { [6, 5] }
 
+    before do
+      board.default_state
+    end
+
     context 'when king tries an invalid move' do
       before do
         board.update(6, 3, '    ')

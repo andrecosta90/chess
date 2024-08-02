@@ -47,6 +47,10 @@ describe Knight do
     let(:invalid_target) { [3, 2] }
     let(:valid_target) { [2, 2] }
 
+    before do
+      board.default_state
+    end
+
     context 'when knight tries an invalid move' do
       it 'returns false' do
         piece = board.select_piece_from(source)

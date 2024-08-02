@@ -115,6 +115,10 @@ describe Pawn do
     let(:invalid_target) { [3, 3] }
     let(:valid_target) { [4, 3] }
 
+    before do
+      board.default_state
+    end
+
     context 'when pawn tries an invalid move' do
       it 'returns false' do
         piece = board.select_piece_from(source)

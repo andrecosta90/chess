@@ -10,6 +10,11 @@ describe Queen do
     let(:invalid_target_one) { [6, 1] }
     let(:invalid_target_two) { [5, 2] }
     let(:valid_target) { [5, 1] }
+
+    before do
+      board.default_state
+    end
+
     context 'when queen tries an invalid move' do
       before do
         board.update(6, 1, '    ')

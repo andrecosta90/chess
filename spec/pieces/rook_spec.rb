@@ -44,28 +44,60 @@ describe Rook do
 
   describe '#valid_movement?' do
     let(:board) { Board.new }
-    let(:source) { [7, 0] }
-    let(:invalid_target_one) { [5, 0] }
-    let(:invalid_target_two) { [5, 1] }
-    let(:valid_target) { [7, 1] }
+    let(:rook1) { Rook.new(true) }
+    let(:rook2) { Rook.new(true) }
+    let(:rook3) { Rook.new(false) }
+
+    let(:source) { [4, 4] }
+
+    before do
+      board.update(source[0], source[1], rook1)
+      board.update(3, 4, rook2)
+      board.update(7, 4, rook3)
+    end
+    # let(:invalid_target_one) { [5, 0] }
+    # let(:invalid_target_two) { [5, 1] }
+    # let(:valid_target) { [7, 1] }
+
     context 'when rook tries an invalid move' do
       it 'returns false' do
         piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, invalid_target_one, board)).to be false
+        expect(piece.valid_movement?(source, [5, 0], board)).to be false
       end
     end
 
     context 'when rook tries to leap' do
       it 'returns false' do
         piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, invalid_target_one, board)).to be false
+        expect(piece.valid_movement?(source, [2, 4], board)).to be false
       end
     end
 
-    context 'when rook tries an valid move' do
+    context 'when rook tries an valid move (i)' do
       it 'returns true' do
         piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, valid_target, board)).to be true
+        expect(piece.valid_movement?(source, [6, 4], board)).to be true
+      end
+    end
+
+    context 'when rook tries an valid move (ii)' do
+      it 'returns true' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, [4, 7], board)).to be true
+      end
+    end
+
+    context 'when white rook tries try to capture a white piece' do
+      it 'returns false' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, [3, 4], board)).to be false
+      end
+    end
+
+    context 'when white rook tries try to capture a black piece' do
+      it 'returns true' do
+        piece = board.select_piece_from(source)
+        expect(piece.valid_movement?(source, [5, 4], board)).to be true
       end
     end
   end

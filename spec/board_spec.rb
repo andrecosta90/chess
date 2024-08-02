@@ -10,6 +10,10 @@ describe Board do
   let(:player) { instance_double(Player) }
   let(:piece) { instance_double(Piece) }
 
+  before do
+    board.default_state
+  end
+
   describe '#update' do
     it 'will update grid matrix value' do
       expect { board.update(0, 0, 'PIECE') }.to change { board.grid[0][0] }.to('PIECE')
