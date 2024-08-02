@@ -111,33 +111,63 @@ describe Pawn do
 
   describe '#valid_movement?' do
     let(:board) { Board.new }
-    let(:source) { [6, 3] }
-    let(:invalid_target) { [3, 3] }
-    let(:valid_target) { [4, 3] }
+    let(:pawn1) { described_class.new(true) }
+    let(:pawn2) { described_class.new(true) }
+
+    let(:source1) { [4, 3] }
+    let(:source2) { [4, 6] }
 
     before do
-      board.default_state
+      board.update(source1[0], source1[1], pawn1)
+      board.update(source2[0], source2[1], pawn2)
+      board.update(3, 6, described_class.new(false))
+      board.update(3, 7, described_class.new(false))
     end
 
     context 'when pawn tries an invalid move' do
-      it 'returns false' do
-        piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, invalid_target, board)).to be false
+      it 'returns false (i)' do
+        expect(pawn1.valid_movement?(source1, [5, 4], board)).to be false
+      end
+
+      it 'returns false (ii)' do
+        expect(pawn1.valid_movement?(source1, [3, 7], board)).to be false
       end
     end
 
     context 'when the pawn tries to move two squares again' do
       it 'returns false' do
-        piece = board.select_piece_from(source)
-        piece.update
-        expect(piece.valid_movement?(source, valid_target, board)).to be false
+        pawn1.update
+        expect(pawn1.valid_movement?(source1, [2, 3], board)).to be false
       end
     end
 
-    context 'when pawn tries an valid move' do
+    context 'when pawn tries to leap' do
+      it 'returns false' do
+        expect(pawn2.valid_movement?(source2, [2, 6], board)).to be false
+      end
+    end
+
+    context 'when pawn tries an valid move (i)' do
       it 'returns true' do
-        piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, valid_target, board)).to be true
+        expect(pawn1.valid_movement?(source1, [2, 3], board)).to be true
+      end
+    end
+
+    context 'when pawn tries a straight capture' do
+      it 'returns false' do
+        expect(pawn2.valid_movement?(source2, [3, 6], board)).to be false
+      end
+    end
+
+    context 'when pawn tries a diagonal capture' do
+      it 'returns true' do
+        expect(pawn2.valid_movement?(source2, [3, 7], board)).to be true
+      end
+    end
+
+    context 'when white pawn tries try to capture a white piece' do
+      it 'returns false' do
+        expect(pawn2.valid_movement?(source2, [3, 5], board)).to be false
       end
     end
   end

@@ -43,25 +43,46 @@ describe Knight do
 
   describe '#valid_movement?' do
     let(:board) { Board.new }
-    let(:source) { [0, 1] }
-    let(:invalid_target) { [3, 2] }
-    let(:valid_target) { [2, 2] }
+    let(:piece) { described_class.new(true) }
+
+    let(:source) { [4, 4] }
 
     before do
-      board.default_state
+      board.update(source[0], source[1], piece)
+      board.update(3, 4, described_class.new(true))
+      board.update(2, 4, described_class.new(true))
+      board.update(4, 3, described_class.new(true))
+      board.update(2, 3, described_class.new(true))
+      board.update(5, 6, described_class.new(false))
     end
 
     context 'when knight tries an invalid move' do
       it 'returns false' do
-        piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, invalid_target, board)).to be false
+        expect(piece.valid_movement?(source, [3, 1], board)).to be false
       end
     end
 
     context 'when knight tries an valid move' do
       it 'returns true' do
-        piece = board.select_piece_from(source)
-        expect(piece.valid_movement?(source, valid_target, board)).to be true
+        expect(piece.valid_movement?(source, [3, 2], board)).to be true
+      end
+    end
+
+    context 'when knight tries to leap' do
+      it 'returns true' do
+        expect(piece.valid_movement?(source, [2, 5], board)).to be true
+      end
+    end
+
+    context 'when white knight tries try to capture a white piece' do
+      it 'returns false' do
+        expect(piece.valid_movement?(source, [2, 3], board)).to be false
+      end
+    end
+
+    context 'when white knight tries try to capture a black piece' do
+      it 'returns true' do
+        expect(piece.valid_movement?(source, [5, 6], board)).to be true
       end
     end
   end
