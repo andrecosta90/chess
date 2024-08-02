@@ -8,7 +8,7 @@ class Bishop < Piece
 
   CODE_POINT = " \u2657  "
   def initialize(white)
-    super(white, white ? CODE_POINT.gray : CODE_POINT.black)
+    super(white, white ? CODE_POINT.gray : CODE_POINT.black, 'bishop')
   end
 
   def valid_movement?(source, target, board)

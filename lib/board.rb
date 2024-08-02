@@ -9,18 +9,19 @@ require './lib/pieces/queen'
 require './lib/pieces/king'
 
 class Board
-  attr_reader :size, :grid
+  attr_reader :size, :grid, :pieces
 
   # rubocop:disable Metrics
   def initialize
     @size = 8
     @grid = Array.new(size) { Array.new(size, '    ') }
+
+    @pieces = { white: [], black: [] }
   end
 
   def default_state
     create_objects(true)
     create_objects(false)
-
   end
 
   def empty?(position)
@@ -65,17 +66,36 @@ class Board
 
   private
 
+  def insert_into_array(piece)
+    piece.white? ? @pieces[:white].push(piece) : @pieces[:black].push(piece)
+  end
+
+  def remove_from_array(piece)
+    piece.white? ? @pieces[:white].delete(piece) : @pieces[:black].delete(piece)
+  end
+
+  def last_item(white)
+    white ? @pieces[:white].last : @pieces[:black].last
+  end
+
+  def make_attribution(piece, row, col)
+    insert_into_array(piece)
+    @grid[row][col] = last_item(piece.white?)
+  end
+
   def create_objects(white)
     indexes = white ? [7, 6] : [0, 1]
-    @size.times { |col| @grid[indexes[1]][col] = Pawn.new(white) }
-    @grid[indexes[0]][0] = Rook.new(white)
-    @grid[indexes[0]][1] = Knight.new(white)
-    @grid[indexes[0]][2] = Bishop.new(white)
-    @grid[indexes[0]][3] = Queen.new(white)
-    @grid[indexes[0]][4] = King.new(white)
-    @grid[indexes[0]][5] = Bishop.new(white)
-    @grid[indexes[0]][6] = Knight.new(white)
-    @grid[indexes[0]][7] = Rook.new(white)
+    @size.times do |col|
+      make_attribution(Pawn.new(white), indexes[1], col)
+    end
+    make_attribution(Rook.new(white), indexes[0], 0)
+    make_attribution(Knight.new(white), indexes[0], 1)
+    make_attribution(Bishop.new(white), indexes[0], 2)
+    make_attribution(Queen.new(white), indexes[0], 3)
+    make_attribution(King.new(white), indexes[0], 4)
+    make_attribution(Bishop.new(white), indexes[0], 5)
+    make_attribution(Knight.new(white), indexes[0], 6)
+    make_attribution(Rook.new(white), indexes[0], 7)
   end
 
   def handle_capture(captured_piece, player)

@@ -10,7 +10,7 @@ class Queen < Piece
 
   CODE_POINT = " \u2655  "
   def initialize(white)
-    super(white, white ? CODE_POINT.gray : CODE_POINT.black)
+    super(white, white ? CODE_POINT.gray : CODE_POINT.black, 'queen')
   end
 
   def valid_movement?(source, target, board)

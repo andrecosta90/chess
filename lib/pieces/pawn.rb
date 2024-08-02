@@ -8,7 +8,7 @@ class Pawn < Piece
   CODE_POINT = " \u2659  "
 
   def initialize(white)
-    super(white, white ? CODE_POINT.gray : CODE_POINT.black)
+    super(white, white ? CODE_POINT.gray : CODE_POINT.black, 'pawn')
     @additive_factor = white ? -1 : 1
   end
 

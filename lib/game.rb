@@ -57,6 +57,9 @@ class Game
     # puts @messages.last(3).join("\n")
     puts @round_message
     puts captured_display
+    p "white: #{@board.pieces[:white].map(&:name)}"
+    p "black: #{@board.pieces[:black].map(&:name)}"
+
     puts
   end
   # rubocop:enable Metrics

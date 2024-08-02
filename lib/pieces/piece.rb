@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Piece
-  attr_reader :n_movements
+  attr_reader :n_movements, :name
 
-  def initialize(white, symbol)
+  def initialize(white, symbol, name = 'default_piece')
     @white = white
     @symbol = symbol
+    @name = name
     @n_movements = 0
   end
 

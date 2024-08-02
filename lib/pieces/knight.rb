@@ -5,7 +5,7 @@ require './lib/pieces/piece'
 class Knight < Piece
   CODE_POINT = " \u2658  "
   def initialize(white)
-    super(white, white ? CODE_POINT.gray : CODE_POINT.black)
+    super(white, white ? CODE_POINT.gray : CODE_POINT.black, 'knight')
   end
 
   def valid_movement?(source, target, board)
