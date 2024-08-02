@@ -43,6 +43,7 @@ describe Board do
       end
       before do
         allow(piece).to receive(:update)
+        allow(board).to receive(:check?)
       end
       it 'returns false' do
         expect(board.execute_move(object, piece, player)).to be false

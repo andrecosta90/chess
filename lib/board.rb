@@ -17,6 +17,7 @@ class Board
     @grid = Array.new(size) { Array.new(size, '    ') }
 
     @pieces = { white: [], black: [] }
+    @kings = { white: nil, black: nil }
   end
 
   def default_state
@@ -39,6 +40,9 @@ class Board
   def update(row, col, value)
     previous_value = @grid[row][col]
     @grid[row][col] = value
+
+    value.update_position(row, col) if value.is_a? Piece
+
     previous_value
   end
 
@@ -57,6 +61,8 @@ class Board
     update(object[:source][0], object[:source][1], '    ')
     captured_piece = update(object[:target][0], object[:target][1], piece)
 
+    p "check=#{check?(player)}"
+
     handle_capture(captured_piece, player)
   end
 
@@ -66,8 +72,36 @@ class Board
 
   private
 
+  def check?(player)
+    opponent_king = king_from(!player.white?)
+    p opponent_king
+
+    pieces = pieces_from(player.white?)
+    pieces.each do |piece|
+      return validate_move({
+                             source: [piece.row, piece.column],
+                             target: [opponent_king.row, opponent_king.column]
+                           }, piece, player)
+    rescue StandardError
+    end
+    false
+  end
+
+  def king_from(white)
+    white ? @kings[:white] : @kings[:black]
+  end
+
+  def pieces_from(white)
+    white ? @pieces[:white] : @pieces[:black]
+  end
+
   def insert_into_array(piece)
     piece.white? ? @pieces[:white].push(piece) : @pieces[:black].push(piece)
+    if piece.white? & piece.is_a?(King)
+      @kings[:white] = piece
+    elsif !piece.white? & piece.is_a?(King)
+      @kings[:black] = piece
+    end
   end
 
   def remove_from_array(piece)
@@ -79,6 +113,7 @@ class Board
   end
 
   def make_attribution(piece, row, col)
+    piece.update_position(row, col)
     insert_into_array(piece)
     @grid[row][col] = last_item(piece.white?)
   end

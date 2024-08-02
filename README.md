@@ -3,9 +3,10 @@
 ## TODO
 
 - [x] Tests
-- [ ] Check
+- [x] Capture tests
+- [x] Check
+- [ ] Test check !
 - [ ] Checkmate
-- [ ] Capture tests
 - [ ] Serialization
 - [ ] En passant
 - [ ] Castling

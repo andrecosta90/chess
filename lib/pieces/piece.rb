@@ -14,6 +14,19 @@ class Piece
     @symbol = symbol
     @name = name
     @n_movements = 0
+    @current_position = { row: nil, col: nil }
+  end
+
+  def update_position(row, col)
+    @current_position = { row: row, col: col }
+  end
+
+  def row
+    @current_position[:row]
+  end
+
+  def column
+    @current_position[:col]
   end
 
   def update
