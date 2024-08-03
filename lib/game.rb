@@ -17,54 +17,74 @@ class Game
     @round_message = ''
   end
 
-  # rubocop:disable Metrics
   def run
     loop do
-      show
-      @round_message = ''
-      # 1. check the movement is valid :: from src to target
-      # 2. if false => returns an error message
-      # 3. if true => make move
-      # 4. any capture ? promotion ?
-      begin
-        @current_player.make_move(@board)
-        @round_message = "Success!\n".green.bold
-        switch_players!
-      rescue StandardError => e
-        @round_message = "#{e}\n#{e.backtrace.join("\n")}\n".red
-      end
+      display_board
+      reset_round_message
+
+      break if game_over?
+
+      switch_players!
     end
   end
-
-  def show
-    # system 'clear'
-    puts "\n*** MY CHESS GAME***\n".green.bold
-    n = @board.size
-    puts
-    puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"
-    n.times do |i|
-      print "#{n - i}  ".green
-      n.times do |j|
-        piece = @board.select_piece_from([i, j])
-        square = (i + j).even? ? piece.to_s.bg_yellow : piece.to_s.bg_red
-        print square
-      end
-      print "  #{n - i}".green
-      puts
-    end
-    puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"
-    puts
-    # puts @messages.last(3).join("\n")
-    puts @round_message
-    puts captured_display
-    p "white: #{@board.pieces[:white].map(&:name)}"
-    p "black: #{@board.pieces[:black].map(&:name)}"
-
-    puts
-  end
-  # rubocop:enable Metrics
 
   private
+
+  def game_over?
+    status = @current_player.make_move(@board)
+    @round_message = "\nSuccess!\n".green.bold + (status[:is_in_check] ? "Check!\n\n" : '')
+    if status[:game_over]
+      puts "\n#{@current_player} is the WINNER!\n\n"
+      return true
+    end
+    false
+  rescue StandardError => e
+    display_error(e)
+    false
+  end
+
+  def display_board
+    system 'clear'
+    puts '*** MY CHESS GAME ***'.green.bold
+    display_coordinates
+    display_pieces
+    display_coordinates
+    display_messages
+  end
+
+  def display_coordinates
+    puts "   #{(' a  '..' h  ').to_a.map(&:green).join('')}"
+  end
+
+  def display_pieces
+    @board.size.times do |i|
+      print "#{@board.size - i}  ".green
+      @board.size.times { |j| print square_display(i, j) }
+      print "  #{@board.size - i}".green
+      puts
+    end
+  end
+
+  def square_display(row, col)
+    piece = @board.select_piece_from([row, col])
+    background_color = (row + col).even? ? :bg_yellow : :bg_red
+    piece.to_s.send(background_color)
+  end
+
+  def display_messages
+    puts @round_message
+    puts captured_display
+    puts
+  end
+
+  def reset_round_message
+    @round_message = ''
+  end
+
+  def display_error(error)
+    # @round_message = "#{error}\n#{error.backtrace.join("\n")}\n".red
+    @round_message = "\n#{error}\n".red
+  end
 
   def captured_display
     "#{@players[0].captured_pieces}\n#{@players[1].captured_pieces}"
