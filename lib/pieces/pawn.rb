@@ -21,8 +21,10 @@ class Pawn < Piece
 
   # TODO
   def en_passant; end
-  # TODO
-  def promotion; end
+
+  def promotion?
+    row == last_rank
+  end
 
   def movable_items(source)
     array = [

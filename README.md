@@ -5,8 +5,9 @@
 - [x] Tests
 - [x] Capture tests
 - [x] Check
-- [ ] Test check !
-- [ ] Checkmate
+- [x] Checkmate
+- [ ] Promotion
 - [ ] Serialization
 - [ ] En passant
 - [ ] Castling
+- [ ] Test check !

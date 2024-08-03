@@ -29,6 +29,14 @@ class Piece
     @current_position[:col]
   end
 
+  def last_rank
+    white? ? 0 : 7
+  end
+
+  def promotion?
+    false
+  end
+
   def update
     @n_movements += 1
   end

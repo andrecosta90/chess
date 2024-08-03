@@ -22,22 +22,28 @@ class Game
       display_board
       reset_round_message
 
+      # p "white=#{@board.pieces[:white]}"
+      # p "black=#{@board.pieces[:black]}"
       break if game_over?
-
-      switch_players!
     end
   end
 
   private
 
-  def game_over?
-    status = @current_player.make_move(@board)
+  def process(status)
     @round_message = "\nSuccess!\n".green.bold + (status[:is_in_check] ? "Check!\n\n" : '')
     if status[:game_over]
       puts "\n#{@current_player} is the WINNER!\n\n"
       return true
     end
+    switch_players!
     false
+  end
+
+  def game_over?
+    status = @current_player.make_move(@board)
+    @current_player.promote(status[:promoted_piece], @board) unless status[:promoted_piece].nil?
+    process(status)
   rescue StandardError => e
     display_error(e)
     false
@@ -45,7 +51,7 @@ class Game
 
   def display_board
     system 'clear'
-    puts '*** MY CHESS GAME ***'.green.bold
+    puts "*** MY CHESS GAME ***\n".green.bold
     display_coordinates
     display_pieces
     display_coordinates

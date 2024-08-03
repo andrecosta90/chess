@@ -60,11 +60,21 @@ class Board
     captured_piece = update(object[:target][0], object[:target][1], piece)
 
     { is_in_check: check?(player), has_captured_piece: handle_capture(captured_piece, player),
-      game_over: captured_piece.is_a?(King) }
+      game_over: captured_piece.is_a?(King), promoted_piece: piece.promotion? ? piece : nil }
   end
 
   def path_free?(array)
     array.all? { |value| empty?(value) }
+  end
+
+  def make_attribution(piece, row, col)
+    piece.update_position(row, col)
+    insert_into_array(piece)
+    @grid[row][col] = last_item(piece.white?)
+  end
+
+  def remove_from_array(piece)
+    piece.white? ? @pieces[:white].delete(piece) : @pieces[:black].delete(piece)
   end
 
   private
@@ -100,18 +110,8 @@ class Board
     end
   end
 
-  def remove_from_array(piece)
-    piece.white? ? @pieces[:white].delete(piece) : @pieces[:black].delete(piece)
-  end
-
   def last_item(white)
     white ? @pieces[:white].last : @pieces[:black].last
-  end
-
-  def make_attribution(piece, row, col)
-    piece.update_position(row, col)
-    insert_into_array(piece)
-    @grid[row][col] = last_item(piece.white?)
   end
 
   def create_objects(white)
