@@ -43,7 +43,9 @@ describe Board do
       end
       before do
         allow(piece).to receive(:update)
+        allow(piece).to receive(:promotion?)
         allow(board).to receive(:check?)
+
       end
       it 'returns false' do
         res = board.execute_move(object, piece, player)
@@ -57,6 +59,7 @@ describe Board do
       end
       before do
         allow(piece).to receive(:update)
+        allow(piece).to receive(:promotion?)
         allow(player).to receive(:capture)
         allow(player).to receive(:white?)
       end
