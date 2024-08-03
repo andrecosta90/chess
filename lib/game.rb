@@ -13,19 +13,26 @@ class Game
     @index = 0
     @current_player = @players[@index]
 
-    @messages = []
     @round_message = ''
   end
 
-  def run
-    loop do
-      display_board
-      reset_round_message
+  def display_board
+    system 'clear'
+    puts "*** MY CHESS GAME ***\n".green.bold
+    display_coordinates
+    display_pieces
+    display_coordinates
+    display_messages
+    reset_round_message
+  end
 
-      # p "white=#{@board.pieces[:white]}"
-      # p "black=#{@board.pieces[:black]}"
-      break if game_over?
-    end
+  def over?
+    status = @current_player.make_move(@board)
+    @current_player.promote(status[:promoted_piece], @board) unless status[:promoted_piece].nil?
+    process(status)
+  rescue StandardError => e
+    display_error(e)
+    false
   end
 
   private
@@ -38,24 +45,6 @@ class Game
     end
     switch_players!
     false
-  end
-
-  def game_over?
-    status = @current_player.make_move(@board)
-    @current_player.promote(status[:promoted_piece], @board) unless status[:promoted_piece].nil?
-    process(status)
-  rescue StandardError => e
-    display_error(e)
-    false
-  end
-
-  def display_board
-    system 'clear'
-    puts "*** MY CHESS GAME ***\n".green.bold
-    display_coordinates
-    display_pieces
-    display_coordinates
-    display_messages
   end
 
   def display_coordinates
