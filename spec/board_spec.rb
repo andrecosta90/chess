@@ -46,7 +46,8 @@ describe Board do
         allow(board).to receive(:check?)
       end
       it 'returns false' do
-        expect(board.execute_move(object, piece, player)).to be false
+        res = board.execute_move(object, piece, player)
+        expect(res[:has_captured_piece]).to be false
       end
     end
 
@@ -60,7 +61,8 @@ describe Board do
         allow(player).to receive(:white?)
       end
       it 'returns true' do
-        expect(board.execute_move(object, piece, player)).to be true
+        res = board.execute_move(object, piece, player)
+        expect(res[:has_captured_piece]).to be true
       end
     end
   end

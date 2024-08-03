@@ -11,7 +11,6 @@ require './lib/pieces/king'
 class Board
   attr_reader :size, :grid, :pieces
 
-  # rubocop:disable Metrics
   def initialize
     @size = 8
     @grid = Array.new(size) { Array.new(size, '    ') }
@@ -56,14 +55,12 @@ class Board
   end
 
   def execute_move(object, piece, player)
-    # validate_move(object, piece, player)
     piece.update
     update(object[:source][0], object[:source][1], '    ')
     captured_piece = update(object[:target][0], object[:target][1], piece)
 
-    p "check=#{check?(player)}"
-
-    handle_capture(captured_piece, player)
+    { is_in_check: check?(player), has_captured_piece: handle_capture(captured_piece, player),
+      game_over: captured_piece.is_a?(King) }
   end
 
   def path_free?(array)
@@ -74,7 +71,6 @@ class Board
 
   def check?(player)
     opponent_king = king_from(!player.white?)
-    p opponent_king
 
     pieces = pieces_from(player.white?)
     pieces.each do |piece|
