@@ -10,6 +10,6 @@
 - [ ] Test check !
 - [ ] Test promotion !
 - [ ] Test checkmate !
-- [ ] Serialization
+- [x] Serialization
 - [ ] En passant
 - [ ] Castling

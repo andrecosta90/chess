@@ -40,7 +40,7 @@ class Game
   def process(status)
     @round_message = "\nSuccess!\n".green.bold + (status[:is_in_check] ? "Check!\n\n" : '')
     if status[:game_over]
-      puts "\n#{@current_player} is the WINNER!\n\n"
+      @round_message += "\nCHECKMATE !! #{@current_player} is the WINNER!\n\n"
       return true
     end
     switch_players!

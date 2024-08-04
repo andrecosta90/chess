@@ -50,15 +50,20 @@ class Chess
 
   def load_game(file_path)
     puts "Loading a game path=#{file_path}..."
+    play(Marshal.load(File.read(file_path)))
+  rescue Errno::ENOENT
+    puts "\nFile not found: #{file_path}\n\n"
+  rescue TypeError
+    puts "\nInvalid file format: #{file_path}\n\n"
   end
 
-  def save(_game)
+  def save(game)
     path = File.join(File.dirname(__FILE__), '../appdata')
     Dir.mkdir(path) unless Dir.exist?(path)
     id = Time.now.utc.strftime('%Y%m%d_%H%M%S')
-    filename = "#{path}/chess_#{id}.json"
+    filename = "#{path}/chess_#{id}.data"
     File.open(filename, 'w') do |file|
-      file.puts 'xx' # state.serialize
+      file.print Marshal.dump(game) # state.serialize
     end
     puts "\nSaving in #{filename}\n\n"
   end
@@ -66,7 +71,7 @@ class Chess
   def play(game)
     loop do
       game.display_board
-      break if game.over?
+      break game.display_board if game.over?
     rescue Interrupt => e
       p e
       save(game)
