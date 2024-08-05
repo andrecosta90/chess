@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Extends the Ruby String class to include methods for coloring and styling text.
 class String
   def colorize(code)
     "\e[#{code}m#{self}\e[0m"

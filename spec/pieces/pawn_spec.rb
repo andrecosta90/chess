@@ -14,27 +14,24 @@ describe Pawn do
 
       it 'is allowed to move up to two squares (white piece)' do
         expect(white_piece.movable_items([x, y])).to eql([
-                                                           [
-                                                             x + white_piece.additive_factor, y
-                                                           ],
-                                                           [
-                                                             x + white_piece.additive_factor * 2, y
-                                                           ]
+                                                           [x + white_piece.additive_factor, y],
+                                                           [x + white_piece.additive_factor * 2, y]
                                                          ])
       end
+
       it 'is allowed to move up to two squares (black piece)' do
         expect(black_piece.movable_items([x, y])).to eql([
-                                                           [
-                                                             x + black_piece.additive_factor, y
-                                                           ],
+                                                           [x + black_piece.additive_factor, y],
                                                            [x + black_piece.additive_factor * 2, y]
                                                          ])
       end
     end
+
     context 'when the pawn has already moved' do
       let(:piece) { described_class.new(true) }
       let(:x) { 5 }
       let(:y) { 6 }
+
       it 'is allowed to move only one square' do
         piece.update
         expect(piece.movable_items([x, y])).to eql([
@@ -43,10 +40,11 @@ describe Pawn do
       end
     end
 
-    context 'when there is no more square for the pawn to move' do
+    context 'when there is no more squares for the pawn to move' do
       let(:piece) { described_class.new(true) }
       let(:x) { 0 }
       let(:y) { 3 }
+
       it 'returns an empty array' do
         expect(piece.movable_items([x, y])).to eql([])
       end
@@ -54,11 +52,12 @@ describe Pawn do
   end
 
   describe '#capturable_items' do
-    context 'when the pawn can capture in both diagonals' do
+    context 'when the pawn can capture on both diagonals' do
       let(:white_piece) { described_class.new(true) }
       let(:black_piece) { described_class.new(true) }
       let(:x) { 6 }
       let(:y) { 1 }
+
       it 'returns two items (white piece)' do
         expect(white_piece.capturable_items([x, y])).to eql(
           [[x + white_piece.additive_factor, y + 1],
@@ -79,13 +78,14 @@ describe Pawn do
       let(:x) { 6 }
       let(:y_left) { 0 }
       let(:y_right) { 7 }
-      it 'returns one item (left)' do
+
+      it 'returns one item (left diagonal)' do
         expect(piece.capturable_items([x, y_left])).to eql(
           [[x + piece.additive_factor, y_left + 1]]
         )
       end
 
-      it 'returns one item (right)' do
+      it 'returns one item (right diagonal)' do
         expect(piece.capturable_items([x, y_right])).to eql(
           [[x + piece.additive_factor, y_right - 1]]
         )
@@ -95,16 +95,13 @@ describe Pawn do
     context 'when the pawn is not able to capture' do
       let(:white_piece) { described_class.new(true) }
       let(:black_piece) { described_class.new(false) }
-      it 'returns an empty array (white)' do
-        expect(white_piece.capturable_items([0, 0])).to eql(
-          []
-        )
+
+      it 'returns an empty array (white piece)' do
+        expect(white_piece.capturable_items([0, 0])).to eql([])
       end
 
-      it 'returns an empty array (black)' do
-        expect(black_piece.capturable_items([7, 7])).to eql(
-          []
-        )
+      it 'returns an empty array (black piece)' do
+        expect(black_piece.capturable_items([7, 7])).to eql([])
       end
     end
   end
@@ -147,25 +144,25 @@ describe Pawn do
       end
     end
 
-    context 'when pawn tries an valid move (i)' do
+    context 'when the pawn makes a valid move (i)' do
       it 'returns true' do
         expect(pawn1.valid_movement?(source1, [2, 3], board)).to be true
       end
     end
 
-    context 'when pawn tries a straight capture' do
+    context 'when the pawn tries a straight capture' do
       it 'returns false' do
         expect(pawn2.valid_movement?(source2, [3, 6], board)).to be false
       end
     end
 
-    context 'when pawn tries a diagonal capture' do
+    context 'when the pawn tries a diagonal capture' do
       it 'returns true' do
         expect(pawn2.valid_movement?(source2, [3, 7], board)).to be true
       end
     end
 
-    context 'when white pawn tries try to capture a white piece' do
+    context 'when the white pawn tries to capture a white piece' do
       it 'returns false' do
         expect(pawn2.valid_movement?(source2, [3, 5], board)).to be false
       end

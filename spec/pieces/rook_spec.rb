@@ -7,15 +7,13 @@ require './lib/pieces/rook'
 describe Rook do
   subject(:piece) { described_class.new(true) }
 
-  describe '#same_diagonal?' do
+  describe '#same_row_or_column?' do
     context 'when the target is on the same row as the source' do
       let(:source) { [7, 2] }
       let(:target) { [7, 5] }
 
       it 'returns true' do
-        expect(
-          piece.same_row_or_column?(target, source)
-        ).to be true
+        expect(piece.same_row_or_column?(target, source)).to be true
       end
     end
 
@@ -24,9 +22,7 @@ describe Rook do
       let(:target) { [1, 5] }
 
       it 'returns true' do
-        expect(
-          piece.same_row_or_column?(target, source)
-        ).to be true
+        expect(piece.same_row_or_column?(target, source)).to be true
       end
     end
 
@@ -35,9 +31,7 @@ describe Rook do
       let(:target) { [4, 3] }
 
       it 'returns false' do
-        expect(
-          piece.same_row_or_column?(target, source)
-        ).to be false
+        expect(piece.same_row_or_column?(target, source)).to be false
       end
     end
   end
@@ -50,43 +44,39 @@ describe Rook do
 
     before do
       board.update(source[0], source[1], piece)
-      board.update(3, 4, described_class.new(true))
-      board.update(7, 4, described_class.new(false))
+      board.update(3, 4, described_class.new(true))  # Blocked move vertically
+      board.update(7, 4, described_class.new(false)) # Opponent piece vertically
     end
 
-    context 'when rook tries an invalid move' do
-      it 'returns false' do
+    context 'when the rook tries an invalid move' do
+      it 'returns false for a diagonal move' do
         expect(piece.valid_movement?(source, [5, 0], board)).to be false
       end
     end
 
-    context 'when rook tries to leap' do
-      it 'returns false' do
+    context 'when the rook tries to leap over pieces' do
+      it 'returns false for a move blocked by an own piece' do
         expect(piece.valid_movement?(source, [2, 4], board)).to be false
       end
     end
 
-    context 'when rook tries an valid move (i)' do
-      it 'returns true' do
+    context 'when the rook makes a valid move' do
+      it 'returns true for a valid vertical move' do
         expect(piece.valid_movement?(source, [6, 4], board)).to be true
       end
-    end
 
-    context 'when rook tries an valid move (ii)' do
-      it 'returns true' do
+      it 'returns true for a valid horizontal move' do
         expect(piece.valid_movement?(source, [4, 7], board)).to be true
       end
     end
 
-    context 'when white rook tries try to capture a white piece' do
-      it 'returns false' do
+    context 'when the rook tries to capture pieces' do
+      it 'returns false when capturing a piece of the same color' do
         expect(piece.valid_movement?(source, [3, 4], board)).to be false
       end
-    end
 
-    context 'when white rook tries try to capture a black piece' do
-      it 'returns true' do
-        expect(piece.valid_movement?(source, [5, 4], board)).to be true
+      it 'returns true when capturing an opponent\'s piece' do
+        expect(piece.valid_movement?(source, [7, 4], board)).to be true
       end
     end
   end

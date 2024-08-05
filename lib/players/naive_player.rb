@@ -2,14 +2,9 @@
 
 require './lib/players/player'
 
+# TODO
 class NaivePlayer < Player
-  def translate_input(board)
-    value = nil
-    board.pieces.each do |piece|
-      value = piece.first_valid_movement
-      return value unless value.nil?
-    end
-  end
+  def translate_input(board); end
 
   def select_option
     1

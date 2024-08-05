@@ -8,61 +8,54 @@ describe Queen do
   describe '#valid_movement?' do
     let(:board) { Board.new }
     let(:piece) { described_class.new(true) }
-
     let(:source) { [4, 4] }
 
     before do
       board.update(source[0], source[1], piece)
-      board.update(3, 4, described_class.new(true))
-      board.update(3, 3, described_class.new(true))
-      board.update(1, 7, described_class.new(true))
-      board.update(7, 4, described_class.new(false))
-      board.update(7, 7, described_class.new(false))
+      board.update(3, 4, described_class.new(true))  # Blocked move vertically
+      board.update(3, 3, described_class.new(true))  # Blocked move diagonally
+      board.update(1, 7, described_class.new(true))  # Blocked move diagonally
+      board.update(7, 4, described_class.new(false)) # Opponent piece vertically
+      board.update(7, 7, described_class.new(false)) # Opponent piece diagonally
     end
 
-    context 'when queen tries an invalid move' do
-      it 'returns false' do
+    context 'when the queen tries an invalid move' do
+      it 'returns false for a move not aligned with queen\'s movement' do
         expect(piece.valid_movement?(source, [6, 3], board)).to be false
       end
     end
 
-    context 'when queen tries to leap' do
-      it 'returns false (i)' do
+    context 'when the queen tries to leap over pieces' do
+      it 'returns false for a vertical move blocked by an own piece' do
         expect(piece.valid_movement?(source, [2, 4], board)).to be false
       end
 
-      it 'returns false (ii)' do
+      it 'returns false for a diagonal move blocked by an own piece' do
         expect(piece.valid_movement?(source, [2, 2], board)).to be false
       end
     end
 
-    context 'when queen tries an valid move (i)' do
-      it 'returns true' do
+    context 'when the queen makes a valid move' do
+      it 'returns true for a valid vertical move' do
         expect(piece.valid_movement?(source, [6, 4], board)).to be true
       end
-    end
 
-    context 'when queen tries an valid move (ii)' do
-      it 'returns true' do
+      it 'returns true for a valid diagonal move' do
         expect(piece.valid_movement?(source, [7, 1], board)).to be true
       end
-    end
 
-    context 'when queen tries an valid move (iii)' do
-      it 'returns true' do
+      it 'returns true for another valid diagonal move' do
         expect(piece.valid_movement?(source, [2, 6], board)).to be true
       end
     end
 
-    context 'when white queen tries try to capture a white piece' do
-      it 'returns false' do
+    context 'when the queen tries to capture pieces' do
+      it 'returns false when capturing a piece of the same color' do
         expect(piece.valid_movement?(source, [3, 4], board)).to be false
       end
-    end
 
-    context 'when white queen tries try to capture a black piece' do
-      it 'returns true' do
-        expect(piece.valid_movement?(source, [5, 4], board)).to be true
+      it 'returns true when capturing an opponent\'s piece' do
+        expect(piece.valid_movement?(source, [7, 4], board)).to be true
       end
     end
   end

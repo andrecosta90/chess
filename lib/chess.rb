@@ -5,14 +5,14 @@ require 'readline'
 require './lib/game'
 require './lib/players/player'
 
+# Manages the Chess game interface and interactions with the user.
+#
+# The Chess class provides the interface for starting a new game, loading a saved game,
+# saving the current game state, and playing the game. It handles user inputs and
+# manages the overall flow of the game.
+#
 class Chess
-  attr_reader :dictionary
-
-  def initialize
-    # @dictionary = Hangman::Utils.load_dictionary
-  end
-
-  # Starts the Chess game.
+  # Starts the Chess game by displaying the main menu and handling user selection.
   def start
     puts '========================='
     puts "Welcome to Chess Game!\n\n"
@@ -24,10 +24,11 @@ class Chess
 
   private
 
-  # Allows the player to choose between starting a new game or loading a saved game.
+  # Prompts the user to choose between starting a new game or loading a saved game.
+  # Continues to prompt until a valid option is chosen.
   def select_option
     loop do
-      print 'Choose a option: '
+      print 'Choose an option: '
       option = gets.to_i
 
       new_game if option == 1
@@ -39,6 +40,7 @@ class Chess
     end
   end
 
+  # Initializes a new game with a white and black player and starts the gameplay loop.
   def new_game
     puts "\nRunning new game...\n\n"
     white_player = Player.new(true)
@@ -48,8 +50,11 @@ class Chess
     play(game)
   end
 
+  # Loads a game from the specified file path and starts the gameplay loop.
+  #
+  # @param file_path [String] The path to the file containing the saved game state.
   def load_game(file_path)
-    puts "Loading a game path=#{file_path}..."
+    puts "Loading a game from path=#{file_path}..."
     play(Marshal.load(File.read(file_path)))
   rescue Errno::ENOENT
     puts "\nFile not found: #{file_path}\n\n"
@@ -57,6 +62,9 @@ class Chess
     puts "\nInvalid file format: #{file_path}\n\n"
   end
 
+  # Saves the current game state to a file with a timestamped filename.
+  #
+  # @param game [Game] The game instance to be saved.
   def save(game)
     path = File.join(File.dirname(__FILE__), '../appdata')
     Dir.mkdir(path) unless Dir.exist?(path)
@@ -68,6 +76,9 @@ class Chess
     puts "\nSaving in #{filename}\n\n"
   end
 
+  # Runs the game loop, displaying the board and checking for game over conditions.
+  #
+  # @param game [Game] The game instance to be played.
   def play(game)
     loop do
       game.display_board
@@ -80,5 +91,6 @@ class Chess
   end
 end
 
+# Start the chess game by creating a new Chess instance and calling `start`.
 game = Chess.new
 game.start
