@@ -77,8 +77,6 @@ class Board
     piece.white? ? @pieces[:white].delete(piece) : @pieces[:black].delete(piece)
   end
 
-  private
-
   def check?(player)
     opponent_king = king_from(!player.white?)
 
@@ -92,6 +90,8 @@ class Board
     end
     false
   end
+
+  private
 
   def king_from(white)
     white ? @kings[:white] : @kings[:black]
@@ -132,6 +132,7 @@ class Board
   def handle_capture(captured_piece, player)
     return false if captured_piece == '    '
 
+    remove_from_array(captured_piece)
     player.capture(player.white? ? captured_piece.to_s.bg_gray.black : captured_piece.to_s.gray)
     true
   end

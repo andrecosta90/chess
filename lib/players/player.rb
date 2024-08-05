@@ -24,9 +24,9 @@ class Player
   end
 
   def make_move(board)
-    object = translate_input(input)
-    piece = board.select_piece_from(object[:source])
+    object = translate_input(board)
 
+    piece = board.select_piece_from(object[:source])
     board.validate_move(object, piece, self)
     board.execute_move(object, piece, self)
   end
@@ -80,7 +80,8 @@ class Player
     value
   end
 
-  def translate_input(value)
+  def translate_input
+    value = input
     { source: get_coordinates(value[...2]),
       target: get_coordinates(value[2..]) }
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require './lib/board'
-require './lib/player'
+require './lib/players/player'
 require './lib/pieces/piece'
 
 # rubocop:disable Metrics/BlockLength
@@ -45,7 +45,6 @@ describe Board do
         allow(piece).to receive(:update)
         allow(piece).to receive(:promotion?)
         allow(board).to receive(:check?)
-
       end
       it 'returns false' do
         res = board.execute_move(object, piece, player)
@@ -133,6 +132,60 @@ describe Board do
       it 'returns true' do
         expect(board.validate_move(object, piece, player)).to be true
       end
+    end
+  end
+
+  describe '#check?' do
+    context 'when the white player tries to capture the black king' do
+      let(:white_player) { instance_double(Player) }
+      let(:object) { { source: [7, 3], target: [6, 4] } }
+
+      before do
+        allow(white_player).to receive(:white?).and_return(true)
+        allow(white_player).to receive(:capture)
+
+        piece = board.select_piece_from(object[:source])
+
+        board.execute_move(object, piece, white_player)
+      end
+      it 'returns true if it is valid check' do
+        board.remove_from_array(board.update(1, 4, '    '))
+        expect(board.check?(white_player)).to be true
+      end
+
+      it 'returns false if it is an invalid check' do
+        expect(board.check?(white_player)).to be false
+      end
+    end
+  end
+
+  describe 'promotion?' do
+    let(:generic_piece) { Piece.new(true, 'xx') }
+    let(:pawn) { Pawn.new(true) }
+    it 'does not allow an ex-Pawn in the first rank to be promoted' do
+      expect(generic_piece.promotion?).to be false
+    end
+
+    it 'does not allow an ex-Pawn in the last rank to be promoted' do
+      board.update(0, 0, generic_piece)
+      expect(generic_piece.promotion?).to be false
+    end
+    it 'does not allow a Pawn in the first rank to be promoted' do
+      expect(pawn.promotion?).to be false
+    end
+
+    it 'allows a Pawn in the last rank to be promoted' do
+      board.update(0, 0, pawn)
+      expect(pawn.promotion?).to be true
+    end
+  end
+
+  describe 'checkmate?' do
+    it 'does not result in game over when an ex-King is captured' do
+      expect(Piece.new(true, 'xx').is_a?(King)).to be false
+    end
+    it 'results in game over when a King is captured' do
+      expect(King.new(true).is_a?(King)).to be true
     end
   end
 end

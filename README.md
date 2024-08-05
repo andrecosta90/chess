@@ -7,9 +7,10 @@
 - [x] Check
 - [x] Checkmate
 - [x] Promotion
-- [ ] Test check !
-- [ ] Test promotion !
-- [ ] Test checkmate !
+- [x] Test check !
+- [x] Test promotion !
+- [x] Test checkmate !
 - [x] Serialization
 - [ ] En passant
 - [ ] Castling
+- [ ] Basic AI computer player (random)

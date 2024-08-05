@@ -18,7 +18,7 @@ class Game
 
   def display_board
     system 'clear'
-    puts "*** MY CHESS GAME ***\n".green.bold
+    puts "*** AWESOME CHESS GAME ***\n".green.bold
     display_coordinates
     display_pieces
     display_coordinates

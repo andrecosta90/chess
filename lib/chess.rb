@@ -3,7 +3,7 @@
 require 'readline'
 
 require './lib/game'
-require './lib/player'
+require './lib/players/player'
 
 class Chess
   attr_reader :dictionary
@@ -18,7 +18,7 @@ class Chess
     puts "Welcome to Chess Game!\n\n"
     puts "\t1 - New game"
     puts "\t2 - Load game"
-    puts '========================='
+    puts "\n=========================\n\n"
     select_option
   end
 
